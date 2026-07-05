@@ -11,7 +11,7 @@ class ContrarianAnalysis(BaseModel):
 # Define Contrarian Agent
 contrarian_agent = Agent(
     name="contrarian_agent",
-    model=RateLimitedGemini(model="gemini-2.5-flash"),
+    model=RateLimitedGemini(model="gemini-3.5-flash"),
     instruction="""You are the Contrarian Agent for FinSight. Your job is to identify if there is a divergence between the stock's recent price action (30-day percentage change) and its recent news sentiment.
     
     A divergence occurs in these cases:

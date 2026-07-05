@@ -118,7 +118,7 @@ def fetch_sector_relative_strength(ticker: str, tool_context: ToolContext = None
 # Define Sector Agent
 sector_agent = Agent(
     name="sector_agent",
-    model=RateLimitedGemini(model="gemini-2.5-flash"),
+    model=RateLimitedGemini(model="gemini-3.5-flash"),
     instruction="""You are the Sector Agent for FinSight. Your job is to fetch and report the relative strength of a stock compared to its sector peers.
     Always call the `fetch_sector_relative_strength` tool with the provided ticker.
     Return the raw dictionary output from the tool exactly as is, without adding extra commentary or interpretations.""",

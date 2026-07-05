@@ -29,7 +29,7 @@ from agents.contrarian_agent import contrarian_agent
 # Define Orchestrator Agent
 orchestrator = Agent(
     name="orchestrator",
-    model=RateLimitedGemini(model="gemini-2.5-flash"),
+    model=RateLimitedGemini(model="gemini-3.5-flash"),
     instruction="""You are the lead financial analyst and Orchestrator of FinSight.
     Your objective is to coordinate a thorough equity analysis of the requested stock ticker.
     
