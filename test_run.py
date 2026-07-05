@@ -5,7 +5,7 @@ import datetime
 from dotenv import load_dotenv
 
 # Load environment variables
-load_dotenv()
+load_dotenv(override=True)
 
 # Force local ADK execution using Gemini API instead of Vertex AI
 os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "False"

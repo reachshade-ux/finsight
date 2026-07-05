@@ -6,7 +6,7 @@ import streamlit as st
 from dotenv import load_dotenv
 
 # Load environment variables
-load_dotenv()
+load_dotenv(override=True)
 
 # Set Google AI Studio API key environment variables for ADK
 # ADK uses GOOGLE_API_KEY or GEMINI_API_KEY. We also force non-Vertex local execution.
