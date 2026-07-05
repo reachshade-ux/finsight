@@ -1,6 +1,7 @@
 import datetime
 import yfinance as yf
 from google.adk.agents import Agent
+from agents.models import RateLimitedGemini
 
 from google.adk.tools import ToolContext
 
@@ -86,7 +87,7 @@ def fetch_earnings_calendar(ticker: str, tool_context: ToolContext = None) -> di
 # Define Earnings Agent
 earnings_agent = Agent(
     name="earnings_agent",
-    model="gemini-2.5-flash",
+    model=RateLimitedGemini(model="gemini-2.5-flash"),
     instruction="""You are the Earnings Agent for FinSight. Your job is to check if a stock has an upcoming earnings date within 30 days.
     Always call the `fetch_earnings_calendar` tool with the provided ticker.
     Return the raw dictionary output from the tool exactly as is, without adding extra commentary or interpretations.""",

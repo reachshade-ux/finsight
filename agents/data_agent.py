@@ -1,5 +1,6 @@
 import yfinance as yf
 from google.adk.agents import Agent
+from agents.models import RateLimitedGemini
 
 from google.adk.tools import ToolContext
 
@@ -72,7 +73,7 @@ def fetch_financial_data(ticker: str, tool_context: ToolContext = None) -> dict:
 # Define Data Agent
 data_agent = Agent(
     name="data_agent",
-    model="gemini-2.5-flash",
+    model=RateLimitedGemini(model="gemini-2.5-flash"),
     instruction="""You are the Data Agent for FinSight. Your job is to fetch and report the live stock metrics for a requested ticker.
     Always call the `fetch_financial_data` tool with the provided ticker.
     Return the raw dictionary output from the tool exactly as is, without adding extra commentary or interpretations.""",

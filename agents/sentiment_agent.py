@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import List, Literal
 from google.adk.agents import Agent
+from agents.models import RateLimitedGemini
 
 class ArticleSentiment(BaseModel):
     headline: str = Field(description="The news headline analyzed.")
@@ -15,7 +16,7 @@ class SentimentAnalysis(BaseModel):
 # Define Sentiment Agent
 sentiment_agent = Agent(
     name="sentiment_agent",
-    model="gemini-2.5-flash",
+    model=RateLimitedGemini(model="gemini-2.5-flash"),
     instruction="""You are the Sentiment Agent for FinSight. Your job is to analyze the sentiment of the provided news headlines for a stock.
     Analyze each headline and determine if its tone/impact is Positive, Neutral, or Negative.
     Synthesize all individual sentiments into an aggregate signal: Bullish (mostly Positive), Bearish (mostly Negative), or Mixed (even mix or mostly Neutral).
