@@ -1,22 +1,17 @@
 import streamlit as st
 
 def apply_bloomberg_theme():
-    """Injects custom CSS to style the Streamlit app with a Bloomberg Terminal dark aesthetic."""
+    """Injects custom CSS to style the Streamlit app with a futuristic glassmorphic dark terminal aesthetic."""
     bloomberg_css = """
     <style>
         /* Base page styling */
-        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap');
 
-        /* Background and text */
+        /* Background and text with a subtle radial gradient for depth */
         .stApp {
-            background-color: #0b0c10;
-            color: #c5c6c7;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        /* Smooth transition for hover states */
-        .terminal-container, .stButton>button, .stTabs [data-baseweb="tab"], .metric-card {
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            background: radial-gradient(circle at 50% 50%, #0d121f 0%, #06080e 100%) !important;
+            color: #e2e8f0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         /* Monospace font styling for numbers and metrics */
@@ -29,6 +24,7 @@ def apply_bloomberg_theme():
         h1, h2, h3, h4, h5, h6 {
             color: #ffffff !important;
             font-weight: 700 !important;
+            letter-spacing: -0.02em;
         }
         
         .title-text {
@@ -36,137 +32,219 @@ def apply_bloomberg_theme():
             color: #ffb000 !important; /* Bloomberg neon amber */
             letter-spacing: 0.05em;
             text-transform: uppercase;
+            text-shadow: 0 0 12px rgba(255, 176, 0, 0.35);
         }
 
         /* Neon status indicators */
         .status-bullish {
             color: #39ff14 !important; /* Neon green */
             font-weight: bold;
+            text-shadow: 0 0 8px rgba(57, 255, 20, 0.4);
         }
         
         .status-bearish {
             color: #ff3333 !important; /* Neon red */
             font-weight: bold;
+            text-shadow: 0 0 8px rgba(255, 51, 51, 0.4);
         }
         
         .status-mixed {
             color: #ffb000 !important; /* Neon amber */
             font-weight: bold;
+            text-shadow: 0 0 8px rgba(255, 176, 0, 0.4);
         }
 
-        /* Metric card styling */
+        /* Keyframes for loading animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Keyframes for pulsing warnings */
+        @keyframes pulseGlowRed {
+            0% { box-shadow: 0 0 8px rgba(255, 51, 51, 0.15); border-color: rgba(255, 51, 51, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(255, 51, 51, 0.4); border-color: rgba(255, 51, 51, 0.6); }
+            100% { box-shadow: 0 0 8px rgba(255, 51, 51, 0.15); border-color: rgba(255, 51, 51, 0.3); }
+        }
+
+        @keyframes pulseGlowAmber {
+            0% { box-shadow: 0 0 8px rgba(255, 176, 0, 0.15); border-color: rgba(255, 176, 0, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(255, 176, 0, 0.4); border-color: rgba(255, 176, 0, 0.6); }
+            100% { box-shadow: 0 0 8px rgba(255, 176, 0, 0.15); border-color: rgba(255, 176, 0, 0.3); }
+        }
+
+        /* Glassmorphic Metric card styling with high depth */
         .metric-card {
-            background-color: #161a22;
-            border: 1px solid #2d3748;
-            border-radius: 6px;
-            padding: 15px;
+            background-color: rgba(18, 24, 38, 0.6) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            border-radius: 12px !important;
+            padding: 18px !important;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+            animation: fadeInUp 0.5s ease-out forwards;
         }
 
         .metric-card:hover {
-            transform: translateY(-2px);
-            border-color: #ffb000;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            transform: translateY(-3px) scale(1.01);
+            border-color: rgba(255, 176, 0, 0.4) !important;
+            box-shadow: 0 12px 40px rgba(255, 176, 0, 0.12) !important;
         }
         
         .metric-card-title {
-            font-size: 0.85rem;
-            color: #8f94a5;
+            font-size: 0.8rem;
+            color: #94a3b8;
             text-transform: uppercase;
-            margin-bottom: 5px;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
         }
         
         .metric-card-value {
             font-family: 'Roboto Mono', monospace;
-            font-size: 1.6rem;
+            font-size: 1.7rem;
             font-weight: 700;
             color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
-        /* Bloomberg style terminal border containers */
+        /* Glassmorphic Container panels for high depth */
         .terminal-container {
-            background-color: #11141a;
-            border: 1px solid #222733;
-            border-left: 4px solid #ffb000;
-            border-radius: 6px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            background-color: rgba(18, 24, 38, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-left: 5px solid #ffb000;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 22px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            animation: fadeInUp 0.6s ease-out forwards;
         }
 
         .terminal-container:hover {
-            transform: translateY(-2px);
-            border-color: #2d3748;
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.18);
             border-left-color: #ffb000;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
         }
         
+        /* Alert pulsing glows */
         .terminal-container.alert {
-            border-left: 4px solid #ff3333;
+            border-left: 5px solid #ff3333;
+            animation: pulseGlowRed 3s infinite;
         }
         
         .terminal-container.success {
-            border-left: 4px solid #39ff14;
+            border-left: 5px solid #39ff14;
+        }
+
+        /* Smooth inputs override */
+        .stSelectbox div[data-baseweb="select"] {
+            background-color: rgba(18, 24, 38, 0.75) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 8px !important;
+            color: #ffffff !important;
+            transition: all 0.25s ease;
+        }
+        
+        .stSelectbox div[data-baseweb="select"]:hover {
+            border-color: #ffb000 !important;
+            box-shadow: 0 0 10px rgba(255, 176, 0, 0.15) !important;
+        }
+        
+        .stTextInput input {
+            background-color: rgba(18, 24, 38, 0.75) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 8px !important;
+            color: #ffffff !important;
+            transition: all 0.25s ease;
+        }
+        
+        .stTextInput input:focus {
+            border-color: #ffb000 !important;
+            box-shadow: 0 0 10px rgba(255, 176, 0, 0.2) !important;
         }
 
         /* Custom styling for tabs */
         .stTabs [data-baseweb="tab-list"] {
-            gap: 10px;
-            background-color: #0b0c10;
+            gap: 12px;
+            background-color: transparent;
+            padding: 5px;
         }
 
         .stTabs [data-baseweb="tab"] {
-            height: 50px;
+            height: 48px;
             white-space: pre-wrap;
-            background-color: #161a22;
-            border-radius: 6px 6px 0px 0px;
-            color: #c5c6c7;
+            background-color: rgba(18, 24, 38, 0.5);
+            border-radius: 8px 8px 0px 0px;
+            color: #94a3b8;
             font-weight: 600;
-            border: 1px solid #222733;
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-bottom: none;
-            padding: 10px 20px;
+            padding: 8px 24px;
+            transition: all 0.25s ease;
         }
 
         .stTabs [data-baseweb="tab"]:hover {
             color: #ffb000;
-            background-color: #1e2530;
+            background-color: rgba(30, 41, 59, 0.7);
         }
 
         .stTabs [aria-selected="true"] {
-            background-color: #222733 !important;
+            background-color: rgba(30, 41, 59, 0.8) !important;
             color: #ffb000 !important;
             border-top: 3px solid #ffb000 !important;
+            box-shadow: 0 -4px 15px rgba(255, 176, 0, 0.1) !important;
         }
         
-        /* Custom buttons styling */
+        /* Futuristic gradient button styling */
         .stButton>button {
-            background-color: #161a22;
-            color: #ffffff;
-            border: 1px solid #2d3748;
-            border-radius: 6px;
+            background: linear-gradient(135deg, rgba(25, 35, 56, 0.8) 0%, rgba(13, 18, 28, 0.8) 100%) !important;
+            backdrop-filter: blur(8px);
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 176, 0, 0.25) !important;
+            border-radius: 8px !important;
             font-family: 'Inter', sans-serif;
             font-weight: 600;
-            padding: 8px 16px;
+            padding: 10px 24px !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
         }
         
         .stButton>button:hover {
-            background-color: #ffb000;
-            color: #0b0c10;
-            border-color: #ffb000;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(255, 176, 0, 0.2);
+            background: linear-gradient(135deg, #ffb000 0%, #ff8c00 100%) !important;
+            color: #06080e !important;
+            border-color: #ffb000 !important;
+            box-shadow: 0 8px 25px rgba(255, 176, 0, 0.35) !important;
+            transform: translateY(-2px);
+        }
+
+        /* Expander overrides */
+        .streamlit-expanderHeader {
+            background-color: rgba(18, 24, 38, 0.5) !important;
+            border: 1px solid rgba(255, 255, 255, 0.05) !important;
+            border-radius: 8px !important;
         }
 
         /* Disclaimer footer styles */
         .disclaimer-footer {
-            margin-top: 50px;
-            padding-top: 20px;
-            border-top: 1px solid #2d3748;
+            margin-top: 60px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
             text-align: center;
             font-size: 0.8rem;
-            color: #6b7280;
+            color: #64748b;
         }
     </style>
     """
     st.markdown(bloomberg_css, unsafe_allow_html=True)
+

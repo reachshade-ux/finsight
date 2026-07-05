@@ -105,7 +105,7 @@ with st.expander("📖 New to FinSight? Click for Onboarding & How-To Guide", ex
     * **Orchestrator Agent:** Coordinates sub-agent runs and synthesizes a 200–300 word professional brief.
     
     #### 🚀 How to use the app:
-    1. **🔍 Analyse Stock (Tab 1):** Click one of the **Quick-Select examples** or enter any valid stock ticker, then click **Run Multi-Agent Analysis**.
+    1. **🔍 Analyse Stock (Tab 1):** Select one of the **dropdown stocks** or choose 'Custom Ticker...' to type any symbol, then click **Run Multi-Agent Analysis**.
     2. **⚔️ Compare Tickers (Tab 2):** Compare 3 to 5 tickers side-by-side and get a comparative verdict.
     3. **📂 Brief Archive (Tab 3):** Explore and manage past research or download report PDFs.
     """)
@@ -115,33 +115,39 @@ tab1, tab2, tab3 = st.tabs(["🔍 Analyse Stock", "⚔️ Compare Tickers", "�
 
 # ==================== TAB 1: ANALYSE ====================
 with tab1:
-    col_input, col_info = st.columns([1.2, 2.8])
+    col_input, col_info = st.columns([1.3, 2.7])
     
     with col_input:
-        st.subheader("Security Input")
+        st.subheader("Select Asset")
         
-        # Initialize selected ticker symbol in session state
-        if "ticker_symbol" not in st.session_state:
-            st.session_state["ticker_symbol"] = "AAPL"
-            
-        # Preset Tickers Selectors
-        st.markdown("**Quick-Select Examples:**")
-        presets = ["AAPL", "NVDA", "MSFT", "TSLA", "AMZN"]
-        preset_cols = st.columns(5)
-        for idx, preset in enumerate(presets):
-            with preset_cols[idx]:
-                if st.button(preset, key=f"preset_{preset}", use_container_width=True):
-                    st.session_state["ticker_symbol"] = preset
-                    # Clear current analysis to force reload
-                    if "current_analysis" in st.session_state:
-                        del st.session_state["current_analysis"]
-                    st.rerun()
-                    
-        ticker_input = st.text_input("Enter Ticker Symbol:", value=st.session_state["ticker_symbol"]).strip().upper()
+        # Dropdown options
+        ticker_options = [
+            "AAPL (Apple)",
+            "NVDA (NVIDIA)",
+            "MSFT (Microsoft)",
+            "TSLA (Tesla)",
+            "AMZN (Amazon)",
+            "GOOGL (Alphabet)",
+            "META (Meta)",
+            "NFLX (Netflix)",
+            "AMD (Advanced Micro Devices)",
+            "PLTR (Palantir)",
+            "ORCL (Oracle)",
+            "Custom Ticker..."
+        ]
         
-        # Sync session state if user types manually
-        if ticker_input != st.session_state["ticker_symbol"]:
-            st.session_state["ticker_symbol"] = ticker_input
+        selected_dropdown = st.selectbox(
+            "Choose a stock ticker:",
+            options=ticker_options,
+            index=0,
+            key="stock_dropdown"
+        )
+        
+        # Determine ticker_input based on selection
+        if selected_dropdown == "Custom Ticker...":
+            ticker_input = st.text_input("Enter Ticker (e.g. BABA, JPM):", "").strip().upper()
+        else:
+            ticker_input = selected_dropdown.split(" ")[0].strip().upper()
             
         analyse_btn = st.button("Run Multi-Agent Analysis", use_container_width=True)
         
