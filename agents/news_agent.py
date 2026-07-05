@@ -151,7 +151,7 @@ def fetch_stock_news(ticker: str, tool_context: ToolContext = None) -> dict:
 # Define News Agent
 news_agent = Agent(
     name="news_agent",
-    model="gemini-1.5-flash",
+    model="gemini-flash-latest",
     instruction="""You are the News Agent for FinSight. Your job is to pull the latest headlines for a requested stock ticker.
     Always call the `fetch_stock_news` tool with the provided ticker.
     Return the raw dictionary output from the tool exactly as is, without adding extra commentary or interpretations.""",

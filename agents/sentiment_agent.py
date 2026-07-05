@@ -15,7 +15,7 @@ class SentimentAnalysis(BaseModel):
 # Define Sentiment Agent
 sentiment_agent = Agent(
     name="sentiment_agent",
-    model="gemini-1.5-flash",
+    model="gemini-flash-latest",
     instruction="""You are the Sentiment Agent for FinSight. Your job is to analyze the sentiment of the provided news headlines for a stock.
     Analyze each headline and determine if its tone/impact is Positive, Neutral, or Negative.
     Synthesize all individual sentiments into an aggregate signal: Bullish (mostly Positive), Bearish (mostly Negative), or Mixed (even mix or mostly Neutral).
