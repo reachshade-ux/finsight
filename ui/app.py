@@ -89,16 +89,60 @@ def generate_comparison_verdict(ticker_summaries: list) -> str:
 st.markdown("<h1 class='title-text'>📊 FinSight Terminal</h1>", unsafe_allow_html=True)
 st.write("Multi-Agent AI Financial Research Assistant powered by Google ADK & Gemini 2.0")
 
+# Onboarding expander guide
+with st.expander("📖 New to FinSight? Click for Onboarding & How-To Guide", expanded=False):
+    st.markdown("""
+    ### Welcome to FinSight Terminal!
+    FinSight is an advanced multi-agent framework designed to automate equity research.
+    
+    #### 🤖 Cooperating Sub-Agents:
+    * **Data Agent:** Pulls live stock performance and fundamental ratios from `yfinance`.
+    * **News Agent:** Fetches recent headlines and manages a local cache with a 4-hour expiry.
+    * **Sentiment Agent:** Performs sentiment classification on headlines using Gemini.
+    * **Earnings Agent:** Identifies if corporate earnings are due in the next 30 days.
+    * **Sector Agent:** Ranks the stock's metrics against standard sector peers.
+    * **Contrarian Agent:** Detects price-news divergence to spot contrarian signals.
+    * **Orchestrator Agent:** Coordinates sub-agent runs and synthesizes a 200–300 word professional brief.
+    
+    #### 🚀 How to use the app:
+    1. **🔍 Analyse Stock (Tab 1):** Click one of the **Quick-Select examples** or enter any valid stock ticker, then click **Run Multi-Agent Analysis**.
+    2. **⚔️ Compare Tickers (Tab 2):** Compare 3 to 5 tickers side-by-side and get a comparative verdict.
+    3. **📂 Brief Archive (Tab 3):** Explore and manage past research or download report PDFs.
+    """)
+
 # Setup Streamlit Tabs
 tab1, tab2, tab3 = st.tabs(["🔍 Analyse Stock", "⚔️ Compare Tickers", "📂 Brief Archive"])
 
 # ==================== TAB 1: ANALYSE ====================
 with tab1:
-    col_input, col_info = st.columns([1, 3])
+    col_input, col_info = st.columns([1.2, 2.8])
     
     with col_input:
         st.subheader("Security Input")
-        ticker_input = st.text_input("Enter Ticker Symbol (e.g., AAPL, MSFT, TSLA):", "AAPL").strip().upper()
+        
+        # Initialize selected ticker symbol in session state
+        if "ticker_symbol" not in st.session_state:
+            st.session_state["ticker_symbol"] = "AAPL"
+            
+        # Preset Tickers Selectors
+        st.markdown("**Quick-Select Examples:**")
+        presets = ["AAPL", "NVDA", "MSFT", "TSLA", "AMZN"]
+        preset_cols = st.columns(5)
+        for idx, preset in enumerate(presets):
+            with preset_cols[idx]:
+                if st.button(preset, key=f"preset_{preset}", use_container_width=True):
+                    st.session_state["ticker_symbol"] = preset
+                    # Clear current analysis to force reload
+                    if "current_analysis" in st.session_state:
+                        del st.session_state["current_analysis"]
+                    st.rerun()
+                    
+        ticker_input = st.text_input("Enter Ticker Symbol:", value=st.session_state["ticker_symbol"]).strip().upper()
+        
+        # Sync session state if user types manually
+        if ticker_input != st.session_state["ticker_symbol"]:
+            st.session_state["ticker_symbol"] = ticker_input
+            
         analyse_btn = st.button("Run Multi-Agent Analysis", use_container_width=True)
         
     with col_info:
