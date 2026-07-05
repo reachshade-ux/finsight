@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from google.adk.agents import Agent
-from agents.models import RateLimitedGemini
+from agents.models import RateLimitedGemini, RateLimitedAgentTool
 from google.adk.apps import App
 from google.adk.tools import AgentTool
 
@@ -51,12 +51,12 @@ orchestrator = Agent(
     
     Always maintain a neutral, analytical tone. Do not make buy/sell recommendations.""",
     tools=[
-        AgentTool(data_agent),
-        AgentTool(news_agent),
-        AgentTool(sentiment_agent),
-        AgentTool(earnings_agent),
-        AgentTool(sector_agent),
-        AgentTool(contrarian_agent)
+        RateLimitedAgentTool(data_agent),
+        RateLimitedAgentTool(news_agent),
+        RateLimitedAgentTool(sentiment_agent),
+        RateLimitedAgentTool(earnings_agent),
+        RateLimitedAgentTool(sector_agent),
+        RateLimitedAgentTool(contrarian_agent)
     ]
 )
 
