@@ -8,8 +8,14 @@ from google.adk.tools import AgentTool
 load_dotenv()
 
 # Set Google AI Studio API key environment variables for ADK
-# ADK uses GOOGLE_API_KEY or GEMINI_API_KEY. We also force non-Vertex local execution.
-os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "False"
+# Automatically route AQ. keys to Vertex AI, and AIzaSy keys to AI Studio
+api_key = os.getenv("GOOGLE_API_KEY", "") or os.getenv("GEMINI_API_KEY", "")
+use_vertex = os.getenv("GOOGLE_GENAI_USE_VERTEXAI", "")
+
+if use_vertex == "True" or (api_key.startswith("AQ.") and use_vertex != "False"):
+    os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "True"
+else:
+    os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "False"
 
 # Import sub-agents
 from agents.data_agent import data_agent
